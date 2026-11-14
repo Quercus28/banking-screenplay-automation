@@ -2,6 +2,9 @@ buildscript {
     repositories {
         mavenCentral()
     }
+        dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:3.3.4")
+    }
 }
 
 plugins {
@@ -59,3 +62,5 @@ tasks.named('test') {
     // System configs
 
 }
+
+apply plugin: 'net.serenity-bdd.serenity-gradle-plugin'
