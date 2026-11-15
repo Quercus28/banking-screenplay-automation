@@ -26,3 +26,6 @@ gradle-app.setting
 
 # Serenity reports
 target/
+
+# IDE compiled output
+bin/
