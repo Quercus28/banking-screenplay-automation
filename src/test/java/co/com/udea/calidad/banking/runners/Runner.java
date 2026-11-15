@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
-        features = "src/test/resources/features/.../",
-        glue = "co.com.udea.calidad.stepdefinitions",
+        features = "src/test/resources/features",
+        glue = "co.com.udea.calidad.banking.stepdefinitions",
         snippets = CucumberOptions.SnippetType.CAMELCASE
 )
 public class Runner {}
