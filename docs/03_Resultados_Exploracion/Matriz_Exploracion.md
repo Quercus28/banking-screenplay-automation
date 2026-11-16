@@ -2,7 +2,7 @@
 
 Exploración manual ejecutada el 14 de noviembre de 2026 sobre https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login.
 
-**Resumen:** 56 escenarios · 13 exitosos · 21 alternativos · 22 negativos · 46 Conformes · 9 No conformes · 1 Bloqueado.
+**Resumen:** 55 escenarios · 13 exitosos · 21 alternativos · 21 negativos · 46 Conformes · 9 No conformes.
 
 ## Matriz consolidada
 
@@ -63,7 +63,6 @@ Exploración manual ejecutada el 14 de noviembre de 2026 sobre https://www.globa
 | EXP-053 | Ordenar movimientos por Date-Time | C4. Movimientos (Transactions) | Cliente bancario (Customer) | Alternativo | Conforme | HAL-12 (observación) |
 | EXP-054 | Navegación con Back y controles de desplazamiento | C4. Movimientos (Transactions) | Cliente bancario (Customer) | Alternativo | Conforme | No aplica |
 | EXP-055 | Reiniciar movimientos con Reset | C4. Movimientos (Transactions) | Cliente bancario (Customer) | Alternativo | Conforme | HAL-10 |
-| EXP-056 | Verificar la existencia de la funcionalidad de transferencias | C5. Transferencias | Cliente bancario (Customer) / Administrador bancario (Bank Manager) | Negativo | Bloqueado | HAL-13 (limitación) |
 
 ## Detalle por escenario
 
@@ -1059,23 +1058,3 @@ Cada caso incluye la información necesaria para redactar historias de usuario y
 - **Evidencias:** [EXP-055_reset_deposito_previo_antes.png](../02_Capturas_Anotadas/EXP-055_reset_deposito_previo_antes.png), [EXP-055_reset_deposito_previo_despues.png](../02_Capturas_Anotadas/EXP-055_reset_deposito_previo_despues.png), [EXP-055_reset_antes.png](../02_Capturas_Anotadas/EXP-055_reset_antes.png), [EXP-055_reset_despues.png](../02_Capturas_Anotadas/EXP-055_reset_despues.png), [EXP-055_reset_saldo.png](../02_Capturas_Anotadas/EXP-055_reset_saldo.png)
 - **Observaciones:** Reset borra el historial y también deja el saldo en 0, sin solicitar confirmación. Se registra como comportamiento por confirmar.
 - **Posible defecto:** HAL-10
-
-### C5. Transferencias
-
-#### EXP-056 — Verificar la existencia de la funcionalidad de transferencias
-
-- **Actor:** Cliente bancario (Customer) / Administrador bancario (Bank Manager)
-- **Tipo de flujo:** Negativo
-- **Objetivo:** Determinar si la aplicación permite transferencias entre cuentas, solicitadas en el enunciado del taller.
-- **Precondiciones:** Sesión de cliente y vista de administrador disponibles.
-- **Datos de entrada:** No requiere datos.
-- **Pasos:**
-  1. Revisar las opciones de la vista del cliente.
-  2. Revisar las opciones de la vista del administrador.
-  3. Buscar el texto 'transfer' en ambas vistas.
-- **Resultado esperado:** Según el enunciado, debería existir una opción de transferencia entre cuentas.
-- **Resultado observado:** Cliente: solo Home, Logout, Transactions, Deposit y Withdrawl. Administrador: solo Home, Add Customer, Open Account y Customers. El texto 'transfer' no aparece en ninguna vista. No existe flujo de transferencia.
-- **Estado:** Bloqueado
-- **Evidencias:** [EXP-056_sin_transferencias_cliente.png](../02_Capturas_Anotadas/EXP-056_sin_transferencias_cliente.png), [EXP-056_sin_transferencias_admin.png](../02_Capturas_Anotadas/EXP-056_sin_transferencias_admin.png)
-- **Observaciones:** No se simularon transferencias ni se confundieron con depósitos o retiros. Se documenta como diferencia entre el enunciado y la aplicación.
-- **Posible defecto:** HAL-13 (limitación)

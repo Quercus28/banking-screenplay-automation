@@ -1,11 +1,11 @@
 # language: es
-@cliente @sesion_cliente
-Característica: Inicio y cierre de sesión del cliente
-  Como cliente bancario
-  Quiero iniciar y cerrar sesión en XYZ Bank
-  Para consultar y operar mis cuentas de forma segura
+@customer @HU-05
+Característica: HU-05 - Ingresar como cliente
+  Como cliente,
+  quiero ingresar a la banca seleccionando mi nombre,
+  para consultar mis cuentas y hacer operaciones sobre ellas.
 
-  @EXP-029 @exitoso
+  @CA-HU05-01 @EXP-029 @exitoso
   Escenario: Inicio de sesión de un cliente existente
     Dado que el visitante abre la aplicación del banco
     Cuando inicia sesión como el cliente "Harry Potter"
@@ -15,18 +15,23 @@ Característica: Inicio y cierre de sesión del cliente
     Y la cuenta "1004" muestra saldo 0 y moneda "Dollar"
     Y se muestran las opciones "Logout", "Transactions", "Deposit" y "Withdrawl"
 
-  @EXP-030 @alternativo
-  Esquema del escenario: Cambio entre las cuentas del cliente
-    Dado que el cliente "Harry Potter" inició sesión
-    Cuando selecciona la cuenta "<cuenta>"
-    Entonces la cuenta "<cuenta>" muestra saldo 0 y moneda "<moneda>"
+  @CA-HU05-02 @EXP-003 @negativo
+  Escenario: Ingreso al módulo cliente sin seleccionar un nombre
+    Dado que el visitante abre la aplicación del banco
+    Cuando abre el inicio de sesión de cliente sin seleccionar un nombre
+    Entonces el selector de clientes lista los clientes precargados
+      | Hermoine Granger   |
+      | Harry Potter       |
+      | Ron Weasly         |
+      | Albus Dumbledore   |
+      | Neville Longbottom |
+    Y no se muestra el botón "Login"
+    Cuando selecciona el cliente "Harry Potter"
+    Entonces se muestra el botón "Login"
+    Cuando vuelve a la opción "---Your Name---"
+    Entonces no se muestra el botón "Login"
 
-    Ejemplos:
-      | cuenta | moneda |
-      | 1005   | Pound  |
-      | 1006   | Rupee  |
-
-  @EXP-031 @alternativo
+  @CA-HU05-03 @EXP-031 @alternativo
   Escenario: Ingreso de un cliente sin cuentas
     Dado que el administrador registró los clientes
       | nombre | apellido    | codigo_postal |
@@ -35,22 +40,6 @@ Característica: Inicio y cierre de sesión del cliente
     Entonces se muestra el mensaje de bienvenida "Welcome Sofia QASinCuenta !!"
     Y se muestra el mensaje "Please open an account with us."
     Y no se muestran las opciones "Transactions", "Deposit" y "Withdrawl"
-
-  @EXP-032 @exitoso
-  Escenario: Cerrar sesión del cliente
-    Dado que el cliente "Harry Potter" inició sesión
-    Cuando cierra sesión
-    Entonces la ruta de la aplicación es "#/customer"
-    Y el selector de clientes muestra la opción "---Your Name---"
-    Y no se muestran los botones "Logout" y "Login"
-
-  @EXP-033 @negativo @defecto @HAL-02
-  Escenario: Volver a la cuenta con el botón Atrás después de cerrar sesión
-    Dado que el cliente "Harry Potter" inició sesión
-    Y cerró sesión
-    Cuando regresa con el botón Atrás del navegador
-    Entonces no se muestra la información de la cuenta
-    Y no puede realizar operaciones sin iniciar sesión de nuevo
 
   @EXP-034 @alternativo
   Escenario: Uso del botón Home durante la sesión del cliente

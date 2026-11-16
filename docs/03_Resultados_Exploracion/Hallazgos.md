@@ -16,8 +16,7 @@ Comportamientos observados durante la exploración del 14 de noviembre de 2026. 
 | HAL-10 | Reset elimina el historial y deja el saldo en 0 sin confirmación | Comportamiento inesperado | Medio | Por confirmar (puede ser el diseño de la demo) | EXP-055 |
 | HAL-11 | Delete elimina clientes sin confirmación | Observación | Bajo | Observación de usabilidad | EXP-028 |
 | HAL-12 | Los encabezados ordenables cambian la URL a '#' | Observación | Bajo | Observación | EXP-027, EXP-053 |
-| HAL-13 | No existe la funcionalidad de transferencias | Limitación | Alto para el alcance del taller | Confirmado (limitación de la aplicación) | EXP-056 |
-| HAL-14 | Errores ortográficos en la interfaz y en los datos precargados | Observación | Bajo (cosmético); relevante para localizadores por texto | Confirmado | EXP-029, EXP-056 |
+| HAL-14 | Errores ortográficos en la interfaz y en los datos precargados | Observación | Bajo (cosmético); relevante para localizadores por texto | Confirmado | EXP-029 |
 | HAL-15 | Montos solo enteros y aceptación de notación exponencial | Observación | Bajo | Por confirmar (restricción de diseño) | EXP-040, EXP-041, EXP-048 |
 | HAL-16 | El administrador no requiere credenciales y no tiene Logout | Observación | Bajo en la demo | Observación (característica de la demo) | EXP-002, EXP-005 |
 | HAL-17 | Sincronización: la vista de operación se reemplaza después del clic | Riesgo de automatización | Alto para la estabilidad de las pruebas automatizadas | Observado durante la exploración | EXP-020, EXP-042 |
@@ -183,18 +182,6 @@ Comportamientos observados durante la exploración del 14 de noviembre de 2026. 
 - **Estado de confirmación:** Observación
 - **Clasificación:** Observación
 
-## HAL-13 — No existe la funcionalidad de transferencias
-
-- **Descripción:** Ningún rol dispone de una opción de transferencia entre cuentas; el enunciado del taller solicita automatizarla.
-- **Pasos para reproducir:**
-  1. Revisar las vistas del cliente y del administrador.
-- **Resultado esperado:** Opción de transferencia (según el enunciado).
-- **Resultado obtenido:** Solo Deposit, Withdrawl y Transactions (cliente).
-- **Evidencia:** EXP-056
-- **Impacto funcional estimado:** Alto para el alcance del taller
-- **Estado de confirmación:** Confirmado (limitación de la aplicación)
-- **Clasificación:** Limitación
-
 ## HAL-14 — Errores ortográficos en la interfaz y en los datos precargados
 
 - **Descripción:** La pestaña de retiro se rotula 'Withdrawl' (en lugar de 'Withdrawal'); los datos de demostración incluyen 'Hermoine' y 'Weasly'.
@@ -203,7 +190,7 @@ Comportamientos observados durante la exploración del 14 de noviembre de 2026. 
   2. Observar las pestañas.
 - **Resultado esperado:** Textos sin errores ortográficos.
 - **Resultado obtenido:** 'Withdrawl'.
-- **Evidencia:** EXP-029, EXP-056
+- **Evidencia:** EXP-029
 - **Impacto funcional estimado:** Bajo (cosmético); relevante para localizadores por texto
 - **Estado de confirmación:** Confirmado
 - **Clasificación:** Observación

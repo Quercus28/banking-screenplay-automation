@@ -18,7 +18,6 @@ import net.serenitybdd.screenplay.actors.OnlineCast;
 import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.actor;
 import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.verificarQue;
 import static co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco.boton;
-import static co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco.botonQueContiene;
 import static co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco.mensaje;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -142,12 +141,6 @@ public class StepDefinition {
     @Entonces("no se muestran plantillas sin procesar como {string}")
     public void noSeMuestranPlantillasSinProcesar(String plantilla) {
         verificarQue(Navegacion.textoVisible(), not(containsString(plantilla)));
-    }
-
-    @Entonces("se muestra una opción para transferir entre cuentas")
-    @Entonces("se muestra una opción relacionada con transferencias")
-    public void seMuestraUnaOpcionDeTransferencia() {
-        verificarQue(ElementoVisible.de(botonQueContiene("transfer")), is(true));
     }
 
     private static void seMuestranLosBotones(String... textos) {

@@ -19,22 +19,6 @@ Característica: Inicio y navegación en XYZ Bank
     Entonces la ruta de la aplicación es "#/manager"
     Y se muestran las opciones "Add Customer", "Open Account" y "Customers"
 
-  @EXP-003 @negativo
-  Escenario: Ingreso al módulo cliente sin seleccionar un nombre
-    Dado que el visitante abre la aplicación del banco
-    Cuando abre el inicio de sesión de cliente sin seleccionar un nombre
-    Entonces el selector de clientes lista los clientes precargados
-      | Hermoine Granger   |
-      | Harry Potter       |
-      | Ron Weasly         |
-      | Albus Dumbledore   |
-      | Neville Longbottom |
-    Y no se muestra el botón "Login"
-    Cuando selecciona el cliente "Harry Potter"
-    Entonces se muestra el botón "Login"
-    Cuando vuelve a la opción "---Your Name---"
-    Entonces no se muestra el botón "Login"
-
   @EXP-004 @alternativo
   Escenario: Regreso a la pantalla principal con el botón Home
     Dado que el administrador está en la pestaña "Open Account"
@@ -44,20 +28,14 @@ Característica: Inicio y navegación en XYZ Bank
     Cuando regresa con el botón Atrás del navegador
     Entonces la ruta de la aplicación es "#/manager/openAccount"
 
-  # Las tres rutas van en escenarios separados: en un esquema, Serenity acumula en la última fila
+  # Cada ruta va en un escenario separado: en un esquema, Serenity acumula en la última fila
   # los fallos de las anteriores y el reporte no mostraría el resultado real de cada ruta.
+  # La ruta "#/account" se verifica en customer/logout.feature (CA-HU07-03).
   @EXP-005 @negativo @defecto @HAL-01
   Escenario: Acceso directo sin sesión a la ruta del administrador
     Dado que el visitante tiene una sesión nueva del navegador
     Cuando abre directamente la ruta "#/manager/addCust"
     Entonces es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado
-
-  @EXP-005 @negativo @defecto @HAL-01
-  Escenario: Acceso directo sin sesión a la ruta de la cuenta del cliente
-    Dado que el visitante tiene una sesión nueva del navegador
-    Cuando abre directamente la ruta "#/account"
-    Entonces es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado
-    Y no se muestran plantillas sin procesar como "{{user}}"
 
   @EXP-005 @negativo @defecto @HAL-01
   Escenario: Acceso directo sin sesión a la ruta de movimientos

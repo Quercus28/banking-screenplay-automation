@@ -22,12 +22,6 @@ public final class PaginaBanco {
         return Target.the("mensaje " + texto).locatedBy("//span[contains(normalize-space(.)," + literal(texto) + ")]");
     }
 
-    public static Target botonQueContiene(String texto) {
-        return Target.the("botón que contiene " + texto)
-                .locatedBy("//button[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ',"
-                        + "'abcdefghijklmnopqrstuvwxyz')," + literal(texto.toLowerCase()) + ")]");
-    }
-
     public static Target encabezadoOrdenable(String columna) {
         return Target.the("encabezado " + columna).locatedBy("//thead//a[normalize-space()=" + literal(columna) + "]");
     }
