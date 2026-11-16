@@ -6,7 +6,7 @@ import net.serenitybdd.screenplay.Interaction;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.WebDriver;
 
-import static co.edu.udea.certificacion.banking.utils.Constantes.URL_BANCO;
+import static co.edu.udea.certificacion.banking.utils.Configuracion.urlBanco;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 /** Carga una ruta interna desde cero, como si se escribiera la URL en una pestaña nueva. */
@@ -27,6 +27,6 @@ public class AbrirRuta implements Interaction {
     public <T extends Actor> void performAs(T actor) {
         WebDriver driver = BrowseTheWeb.as(actor).getDriver();
         driver.get("about:blank");
-        driver.get(URL_BANCO + ruta);
+        driver.get(urlBanco() + ruta);
     }
 }

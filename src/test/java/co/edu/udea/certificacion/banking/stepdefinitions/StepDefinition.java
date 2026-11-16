@@ -11,9 +11,12 @@ import io.cucumber.java.Before;
 import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Entonces;
+import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
+import org.openqa.selenium.WebDriver;
 
 import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.actor;
 import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.verificarQue;
@@ -27,12 +30,15 @@ import static org.hamcrest.Matchers.not;
 /** Hooks y pasos comunes: apertura de la aplicación, navegación y elementos visibles. */
 public class StepDefinition {
 
+    @Managed(driver = "chrome", uniqueSession = true)
+    WebDriver driver;
+
     @Before
     public void config() {
         OnStage.setTheStage(new OnlineCast());
         // Un único actor cumple los roles de administrador y de cliente: ambos comparten el
         // mismo navegador, que es donde la aplicación guarda sus datos.
-        OnStage.theActorCalled("Usuario del banco");
+        OnStage.theActorCalled("Usuario del banco").can(BrowseTheWeb.with(driver));
     }
 
     @Dado("que el visitante abre la aplicación del banco")

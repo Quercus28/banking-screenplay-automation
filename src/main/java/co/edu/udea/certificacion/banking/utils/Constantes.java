@@ -2,7 +2,6 @@ package co.edu.udea.certificacion.banking.utils;
 
 public final class Constantes {
 
-    public static final String URL_BANCO = "https://www.globalsqa.com/angularJs-protractor/BankingProject/";
     public static final int CLIENTES_PRECARGADOS = 5;
 
     public static final String PREFIJO_CLIENTE_CREADO = "Customer added successfully with customer id :";

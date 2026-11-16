@@ -4,7 +4,7 @@ import co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 
-import static co.edu.udea.certificacion.banking.utils.Constantes.URL_BANCO;
+import static co.edu.udea.certificacion.banking.utils.Configuracion.urlBanco;
 
 /** Datos de la página actual: ruta, título y texto visible. */
 public final class Navegacion {
@@ -16,7 +16,8 @@ public final class Navegacion {
     public static Question<String> rutaActual() {
         return Question.about("la ruta actual").answeredBy(actor -> {
             String url = BrowseTheWeb.as(actor).getDriver().getCurrentUrl();
-            return url.startsWith(URL_BANCO) ? url.substring(URL_BANCO.length()) : url;
+            String base = urlBanco();
+            return url.startsWith(base) ? url.substring(base.length()) : url;
         });
     }
 

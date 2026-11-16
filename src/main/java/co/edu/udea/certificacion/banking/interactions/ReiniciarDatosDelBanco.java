@@ -7,7 +7,7 @@ import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 
-import static co.edu.udea.certificacion.banking.utils.Constantes.URL_BANCO;
+import static co.edu.udea.certificacion.banking.utils.Configuracion.urlBanco;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
 /**
@@ -37,8 +37,8 @@ public class ReiniciarDatosDelBanco implements Interaction {
         }
         // Se vacía desde un recurso del mismo dominio que no ejecuta la aplicación: si se hiciera
         // con la aplicación cargada, sus guardados diferidos podrían volver a escribir datos.
-        driver.get(URL_BANCO + "style.css");
+        driver.get(urlBanco() + "style.css");
         BrowseTheWeb.as(actor).evaluateJavascript("window.localStorage.clear();");
-        driver.get(URL_BANCO + ruta);
+        driver.get(urlBanco() + ruta);
     }
 }
