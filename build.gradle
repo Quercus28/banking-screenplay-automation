@@ -23,6 +23,9 @@ java {
 
 repositories {
     mavenCentral()
+    // JitPack is only needed for the serenity-captions library (captions panel used by "gradlew serenityCaptions").
+    // Source and docs: https://github.com/Quercus28/serenity-captions
+    maven { url 'https://jitpack.io' }
 }
 
 ext {
@@ -47,6 +50,9 @@ dependencies {
     testImplementation "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrest"
     implementation 'org.slf4j:slf4j-simple:2.0.5'
     testImplementation("io.github.bonigarcia:webdrivermanager:5.4.1")
+
+    // Captions panel for presenting the tests (gradlew serenityCaptions)
+    testImplementation 'com.github.Quercus28:serenity-captions:1.0.0'
 
     //Lombok dependencies
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -81,11 +87,11 @@ tasks.named('test') {
 }
 
 // Two commands to run the suite:
-//   ./gradlew serenity       -> without the demo panel
-//   ./gradlew serenityDemo   -> with the demo panel (pauses on every step)
+//   ./gradlew serenity           -> without captions
+//   ./gradlew serenityCaptions   -> with captions (pauses on every step)
 [
-        serenity    : 'Runs the Serenity tests WITHOUT the demo panel and builds the report',
-        serenityDemo: 'Runs the Serenity tests WITH the demo panel and builds the report'
+        serenity        : 'Runs the Serenity tests WITHOUT captions and builds the report',
+        serenityCaptions: 'Runs the Serenity tests WITH captions and builds the report'
 ].each { taskName, taskDescription ->
     tasks.register(taskName) {
         group = 'serenity'
@@ -106,9 +112,9 @@ tasks.named('aggregate') {
 
 gradle.taskGraph.whenReady { graph ->
     // Only these two commands override serenity.conf; plain "gradlew test" keeps using it.
-    def demo = graph.hasTask(':serenityDemo')
-    if (demo || graph.hasTask(':serenity')) {
-        tasks.test.systemProperty 'demo.overlay.enabled', demo.toString()
+    def captions = graph.hasTask(':serenityCaptions')
+    if (captions || graph.hasTask(':serenity')) {
+        tasks.test.systemProperty 'captions.enabled', captions.toString()
         // Always build the report; the serenity/serenityDemo task fails the build afterwards if a scenario failed.
         tasks.test.ignoreFailures = true
     }

@@ -19,9 +19,9 @@ El driver de Chrome se descarga solo (`webdriver.autodownload = true` en `sereni
 
 ## Cómo correr las pruebas
 
-Hay dos comandos. Los dos limpian el proyecto, ejecutan todos los escenarios y generan el reporte de Serenity. La única diferencia es si se muestra o no el **panel de demo** (ver más abajo).
+Hay dos comandos. Los dos limpian el proyecto, ejecutan todos los escenarios y generan el reporte de Serenity. La única diferencia es si se muestran o no los **subtítulos** de [Serenity Captions](#subtítulos-serenity-captions).
 
-### Sin demo (ejecución normal, rápida)
+### Sin subtítulos (ejecución normal, rápida)
 
 ```bash
 # Windows (PowerShell o CMD)
@@ -33,17 +33,17 @@ Hay dos comandos. Los dos limpian el proyecto, ejecutan todos los escenarios y g
 
 Es la forma de correr la suite para verificar resultados: el navegador avanza a velocidad normal, sin pausas.
 
-### Con demo (para presentar o explicar en clase)
+### Con subtítulos (para presentar o explicar en clase)
 
 ```bash
 # Windows (PowerShell o CMD)
-.\gradlew.bat serenityDemo
+.\gradlew.bat serenityCaptions
 
 # Linux / macOS / Git Bash
-./gradlew serenityDemo
+./gradlew serenityCaptions
 ```
 
-El navegador muestra el panel de demo y se pausa en cada paso para que se pueda seguir lo que hace la prueba. Toda la suite tarda bastante más que en modo normal; para una presentación conviene filtrar por tags (ver abajo).
+El navegador muestra el panel de subtítulos y se pausa en cada paso para que se pueda seguir lo que hace la prueba. Toda la suite tarda bastante más que en modo normal; para una presentación conviene filtrar por tags (ver abajo).
 
 ### Correr solo algunos escenarios (tags)
 
@@ -53,8 +53,8 @@ Los dos comandos aceptan un filtro de tags de Cucumber con `-Dtags`:
 # Una historia de usuario
 .\gradlew.bat serenity -Dtags="@HU-08"
 
-# Un escenario explorado concreto, con demo
-.\gradlew.bat serenityDemo -Dtags="@EXP-035"
+# Un escenario explorado concreto, con subtítulos
+.\gradlew.bat serenityCaptions -Dtags="@EXP-035"
 
 # Combinaciones
 .\gradlew.bat serenity -Dtags="@manager and @happy-path"
@@ -89,55 +89,44 @@ target/site/serenity/index.html
 
 ### ¿Y `gradlew test`?
 
-`.\gradlew.bat test` también ejecuta los escenarios, pero no genera el reporte agregado y usa tal cual lo que diga `serenity.conf` (donde la demo está activada por defecto, `demo.overlay.enabled = true`). Para el día a día usa `serenity` o `serenityDemo`, que deciden por ti si la demo va activa o no.
+`.\gradlew.bat test` también ejecuta los escenarios, pero no genera el reporte agregado y usa tal cual lo que diga `serenity.conf` (donde los subtítulos están apagados, `captions.enabled = false`). Para el día a día usa `serenity` o `serenityCaptions`.
 
 ---
 
-## ¿Qué es la demo?
+## Subtítulos (Serenity Captions)
 
-La demo es una **ayuda didáctica** que se agregó al proyecto para poder explicar en vivo cómo funciona Screenplay. Cuando está activa, dibuja un panel oscuro en la parte inferior del navegador mientras corre la prueba. Ejemplo ilustrativo:
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│ Deposits  ›  Deposit a valid amount                       (escenario) │
-│ [When]  the customer deposits 100                     (paso Gherkin)  │
-│   ↳ Customer makes a deposit of 100                   (Task)          │
-│     ↳ Enter "100" into the amount field               (Interaction)   │
-└──────────────────────────────────────────────────────────────────────┘
-```
+Los subtítulos son una **ayuda didáctica** para explicar en vivo cómo funciona Screenplay. Mientras corre la prueba, dibujan un panel oscuro en la parte inferior del navegador:
 
 - **Primera línea:** feature y escenario en ejecución.
-- **Segunda línea:** el paso Gherkin actual, con una etiqueta de color según el tipo: azul para `Given`, naranja para `When`, morado para `Then` (`And`/`But` heredan el color del paso anterior).
+- **Segunda línea:** el paso Gherkin actual (`Step 3 of 6 · WHEN`), con una etiqueta de color según el tipo: azul para `Given`, naranja para `When`, morado para `Then` (`And`/`But` heredan el color del paso anterior).
 - **Líneas con `↳`:** las *Tasks* e *Interactions* de Screenplay que componen ese paso, anidadas según quién llama a quién.
 - **Al terminar el escenario:** el borde del panel se pone verde si pasó o rojo si falló.
 
 Además, la ejecución se **pausa** después de cada paso para que el público alcance a leer. Así se ve la relación directa entre el lenguaje de negocio (Gherkin), las tareas del actor (Screenplay) y lo que pasa en el navegador.
 
-La demo no cambia lo que se prueba ni los resultados: solo muestra información y agrega pausas. Tampoco toca las alertas nativas del navegador (cuando hay un `alert` abierto, el panel no se redibuja para no cerrarlo).
+Los subtítulos no cambian lo que se prueba ni los resultados: solo muestran información y agregan pausas. Tampoco tocan las alertas nativas del navegador (cuando hay un `alert` abierto, el panel no se redibuja para no cerrarlo).
 
-### Cómo está implementada
+### De dónde vienen
 
-| Archivo | Rol |
-|---|---|
-| `src/test/java/.../demo/DemoOverlay.java` | Dibuja el panel en la página con JavaScript y maneja las pausas |
-| `src/test/java/.../demo/DemoPlugin.java` | Plugin de Cucumber (registrado en `Runner.java`): avisa qué escenario y qué paso Gherkin empiezan |
-| `src/test/java/.../demo/DemoStepListener.java` | Listener de Serenity: avisa qué Task o Interaction de Screenplay se está ejecutando |
-| `src/test/java/.../stepdefinitions/DemoHooks.java` | Hooks `@Before`/`@After` que registran el listener cuando la demo está activa |
+Empezaron como el paquete `demo` de este proyecto y se separaron en una librería reutilizable, **[serenity-captions](https://github.com/Quercus28/serenity-captions)**, para que cualquier proyecto Serenity + Screenplay + Cucumber la pueda usar. Aquí se integra así:
+
+- `build.gradle`: dependencia `com.github.Quercus28:serenity-captions:1.0.0` (desde JitPack) y las tareas `serenity` / `serenityCaptions`.
+- `Runner.java`: `plugin = "io.github.quercus28.serenity.captions.CaptionsPlugin"`.
+
+Las instrucciones para usarla en otro proyecto están en el README de la librería.
 
 ### Configuración (`src/test/resources/serenity.conf`)
 
 ```hocon
-demo {
-  overlay {
-    enabled = true          # gradlew serenity / serenityDemo lo sobreescriben
-    step.pause.ms = 1800    # pausa después de cada paso Gherkin
-    action.pause.ms = 700   # pausa después de cada Task / Interaction
-    result.pause.ms = 3000  # tiempo que se muestra el resultado del escenario
-  }
+captions {
+  enabled = false         # gradlew serenity / serenityCaptions lo sobreescriben
+  step.pause.ms = 1800    # pausa después de cada paso Gherkin
+  action.pause.ms = 700   # pausa después de cada Task / Interaction
+  result.pause.ms = 3000  # tiempo que se muestra el resultado del escenario
 }
 ```
 
-Si la demo va muy rápida o muy lenta, ajusta las pausas aquí.
+Si los subtítulos van muy rápido o muy lento, ajusta las pausas aquí.
 
 ---
 
@@ -154,15 +143,14 @@ src/main/java/co/edu/udea/certificacion/banking/
 
 src/test/java/co/edu/udea/certificacion/banking/
 ├── runners/Runner.java   Runner de Cucumber + Serenity
-├── stepdefinitions/      Glue entre los pasos Gherkin y Screenplay
-└── demo/                 Panel de demo (ver arriba)
+└── stepdefinitions/      Glue entre los pasos Gherkin y Screenplay
 
 src/test/resources/
 ├── features/
 │   ├── home/             Navegación en la pantalla de inicio
 │   ├── manager/          Registrar clientes, abrir cuentas, buscar y eliminar clientes
 │   └── customer/         Login, logout, depósitos, retiros, saldo, transacciones, filtros, reset
-└── serenity.conf         Navegador, URL de la app y configuración de la demo
+└── serenity.conf         Navegador, URL de la app y configuración de los subtítulos
 
 docs/                     Exploración manual, capturas, historias de usuario e informe (ver docs/README.md)
 ```
@@ -175,5 +163,6 @@ La suite tiene **13 features** y **62 escenarios**, trazados a 12 historias de u
 
 - **`JAVA_HOME is not set` / versión de Java:** instala un JDK 17+ y configura `JAVA_HOME`.
 - **El navegador no abre o falla el driver:** actualiza Chrome y vuelve a ejecutar; el driver se descarga de nuevo según la versión instalada.
-- **Ejecutar sin ventana (CI):** descomenta `#headless.mode = true` en `serenity.conf`. No tiene sentido combinarlo con la demo.
+- **Ejecutar sin ventana (CI):** descomenta `#headless.mode = true` en `serenity.conf`. No tiene sentido combinarlo con los subtítulos.
+- **`Unable to delete directory` / `Cannot delete file` en `build` o `target`:** un daemon de Gradle de una corrida anterior quedó con archivos abiertos. Ejecuta `.\gradlew.bat --stop` y vuelve a correr, o usa `.\gradlew.bat serenity --no-daemon`.
 - **Escenarios de filtro por fecha que “se quedan quietos”:** el filtro de transacciones trabaja por minutos, así que algunos escenarios esperan al inicio del siguiente minuto (`WaitForNextMinute`) para separar transacciones. Pueden quedarse hasta un minuto sin hacer nada; es normal.
