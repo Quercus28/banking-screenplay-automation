@@ -1,20 +1,19 @@
-# language: es
 @customer @HU-06
-Característica: HU-06 - Consultar el saldo de cada cuenta
-  Como cliente,
-  quiero cambiar entre mis cuentas,
-  para conocer el saldo y la moneda de cada una antes de hacer una operación.
+Feature: HU-06 - View the balance of each account
+  As a customer,
+  I want to switch between my accounts,
+  so that I know the balance and currency of each one before making a transaction.
 
-  # CA-HU06-02 (una operación no afecta las otras cuentas) se verifica en
+  # CA-HU06-02 (a transaction does not affect the other accounts) is checked in
   # customer/transactions.feature (EXP-050).
 
-  @CA-HU06-01 @EXP-030 @alternativo
-  Esquema del escenario: Cambio entre las cuentas del cliente
-    Dado que el cliente "Harry Potter" inició sesión
-    Cuando selecciona la cuenta "<cuenta>"
-    Entonces la cuenta "<cuenta>" muestra saldo 0 y moneda "<moneda>"
+  @CA-HU06-01 @EXP-030 @alternative
+  Scenario Outline: Switch between the customer's accounts
+    Given the customer "Harry Potter" has logged in
+    When the user selects the account "<account>"
+    Then the account "<account>" shows balance 0 and currency "<currency>"
 
-    Ejemplos:
-      | cuenta | moneda |
-      | 1005   | Pound  |
-      | 1006   | Rupee  |
+    Examples:
+      | account | currency |
+      | 1005    | Pound    |
+      | 1006    | Rupee    |

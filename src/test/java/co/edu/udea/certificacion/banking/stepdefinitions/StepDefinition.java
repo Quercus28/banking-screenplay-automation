@@ -1,16 +1,16 @@
 package co.edu.udea.certificacion.banking.stepdefinitions;
 
-import co.edu.udea.certificacion.banking.interactions.AbrirRuta;
-import co.edu.udea.certificacion.banking.interactions.Navegador;
-import co.edu.udea.certificacion.banking.interactions.PulsarBoton;
-import co.edu.udea.certificacion.banking.questions.ElementoVisible;
-import co.edu.udea.certificacion.banking.questions.Navegacion;
-import co.edu.udea.certificacion.banking.tasks.AbrirBanco;
-import co.edu.udea.certificacion.banking.tasks.IngresarComoAdministrador;
+import co.edu.udea.certificacion.banking.interactions.Browser;
+import co.edu.udea.certificacion.banking.interactions.OpenRoute;
+import co.edu.udea.certificacion.banking.interactions.PressButton;
+import co.edu.udea.certificacion.banking.questions.Navigation;
+import co.edu.udea.certificacion.banking.questions.Visibility;
+import co.edu.udea.certificacion.banking.tasks.LoginAsBankManager;
+import co.edu.udea.certificacion.banking.tasks.OpenBank;
 import io.cucumber.java.Before;
-import io.cucumber.java.es.Cuando;
-import io.cucumber.java.es.Dado;
-import io.cucumber.java.es.Entonces;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import net.serenitybdd.annotations.Managed;
 import net.serenitybdd.screenplay.Question;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
@@ -18,16 +18,16 @@ import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import org.openqa.selenium.WebDriver;
 
-import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.actor;
-import static co.edu.udea.certificacion.banking.stepdefinitions.Verificacion.verificarQue;
-import static co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco.boton;
-import static co.edu.udea.certificacion.banking.userinterfaces.PaginaBanco.mensaje;
+import static co.edu.udea.certificacion.banking.stepdefinitions.Verification.actor;
+import static co.edu.udea.certificacion.banking.stepdefinitions.Verification.verifyThat;
+import static co.edu.udea.certificacion.banking.userinterfaces.BankPage.button;
+import static co.edu.udea.certificacion.banking.userinterfaces.BankPage.message;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
-/** Hooks y pasos comunes: apertura de la aplicación, navegación y elementos visibles. */
+/** Hooks and common steps: opening the application, navigation and visible elements. */
 public class StepDefinition {
 
     @Managed(driver = "chrome", uniqueSession = true)
@@ -36,128 +36,128 @@ public class StepDefinition {
     @Before
     public void config() {
         OnStage.setTheStage(new OnlineCast());
-        // Un único actor cumple los roles de administrador y de cliente: ambos comparten el
-        // mismo navegador, que es donde la aplicación guarda sus datos.
-        OnStage.theActorCalled("Usuario del banco").can(BrowseTheWeb.with(driver));
+        // A single actor plays both the manager and the customer roles: they share the same browser,
+        // which is where the application stores its data.
+        OnStage.theActorCalled("Bank user").can(BrowseTheWeb.with(driver));
     }
 
-    @Dado("que el visitante abre la aplicación del banco")
-    @Dado("que el visitante tiene una sesión nueva del navegador")
-    public void abrirLaAplicacionDelBanco() {
-        actor().wasAbleTo(AbrirBanco.conDatosIniciales());
+    @Given("the visitor opens the bank application")
+    @Given("the visitor has a new browser session")
+    public void openTheBankApplication() {
+        actor().wasAbleTo(OpenBank.withDemoData());
     }
 
-    @Cuando("abre directamente la ruta {string}")
-    public void abrirDirectamenteLaRuta(String ruta) {
-        actor().attemptsTo(AbrirRuta.directamente(ruta));
+    @When("the user opens the route {string} directly")
+    public void openTheRouteDirectly(String route) {
+        actor().attemptsTo(OpenRoute.directly(route));
     }
 
-    @Cuando("ingresa como administrador")
-    public void ingresarComoAdministrador() {
-        actor().attemptsTo(IngresarComoAdministrador.alBanco());
+    @When("the user logs in as bank manager")
+    public void logInAsBankManager() {
+        actor().attemptsTo(LoginAsBankManager.now());
     }
 
-    @Cuando("pulsa el botón {string}")
-    @Cuando("pulsa el control {string}")
-    public void pulsarElBoton(String texto) {
-        actor().attemptsTo(PulsarBoton.llamado(texto));
+    @When("the user clicks the {string} button")
+    @When("the user clicks the {string} control")
+    public void clickTheButton(String text) {
+        actor().attemptsTo(PressButton.called(text));
     }
 
-    @Cuando("regresa con el botón Atrás del navegador")
-    public void regresarConElBotonAtras() {
-        actor().attemptsTo(Navegador.regresar());
+    @When("the user goes back with the browser Back button")
+    public void goBackWithTheBrowserBackButton() {
+        actor().attemptsTo(Browser.goBack());
     }
 
-    @Cuando("recarga la página")
-    public void recargarLaPagina() {
-        actor().attemptsTo(Navegador.recargar());
+    @When("the user reloads the page")
+    public void reloadThePage() {
+        actor().attemptsTo(Browser.reload());
     }
 
-    @Entonces("el título de la página es {string}")
-    public void elTituloDeLaPaginaEs(String titulo) {
-        verificarQue(Navegacion.tituloDeLaPagina(), equalTo(titulo));
+    @Then("the page title is {string}")
+    public void thePageTitleIs(String title) {
+        verifyThat(Navigation.pageTitle(), equalTo(title));
     }
 
-    @Entonces("la ruta de la aplicación es {string}")
-    public void laRutaDeLaAplicacionEs(String ruta) {
-        verificarQue(Navegacion.rutaActual(), equalTo(ruta));
+    @Then("the application route is {string}")
+    public void theApplicationRouteIs(String route) {
+        verifyThat(Navigation.currentRoute(), equalTo(route));
     }
 
-    @Entonces("se muestra el botón {string}")
-    public void seMuestraElBoton(String texto) {
-        verificarQue(ElementoVisible.de(boton(texto)), is(true));
+    @Then("the {string} button is displayed")
+    public void theButtonIsDisplayed(String text) {
+        verifyThat(Visibility.of(button(text)), is(true));
     }
 
-    @Entonces("se muestran las opciones {string} y {string}")
-    @Entonces("se muestran los controles {string} y {string}")
-    public void seMuestranLasOpciones(String primera, String segunda) {
-        seMuestranLosBotones(primera, segunda);
+    @Then("the {string} and {string} options are displayed")
+    @Then("the {string} and {string} controls are displayed")
+    public void theOptionsAreDisplayed(String first, String second) {
+        buttonsAreDisplayed(first, second);
     }
 
-    @Entonces("se muestran las opciones {string}, {string} y {string}")
-    public void seMuestranLasOpciones(String primera, String segunda, String tercera) {
-        seMuestranLosBotones(primera, segunda, tercera);
+    @Then("the {string}, {string} and {string} options are displayed")
+    public void theOptionsAreDisplayed(String first, String second, String third) {
+        buttonsAreDisplayed(first, second, third);
     }
 
-    @Entonces("se muestran las opciones {string}, {string}, {string} y {string}")
-    public void seMuestranLasOpciones(String primera, String segunda, String tercera, String cuarta) {
-        seMuestranLosBotones(primera, segunda, tercera, cuarta);
+    @Then("the {string}, {string}, {string} and {string} options are displayed")
+    public void theOptionsAreDisplayed(String first, String second, String third, String fourth) {
+        buttonsAreDisplayed(first, second, third, fourth);
     }
 
-    @Entonces("no se muestra el botón {string}")
-    public void noSeMuestraElBoton(String texto) {
-        noSeMuestranLosBotones(texto);
+    @Then("the {string} button is not displayed")
+    public void theButtonIsNotDisplayed(String text) {
+        buttonsAreNotDisplayed(text);
     }
 
-    @Entonces("no se muestran los botones {string} y {string}")
-    public void noSeMuestranLosBotones(String primero, String segundo) {
-        noSeMuestranLosBotones(new String[]{primero, segundo});
+    @Then("the {string} and {string} buttons are not displayed")
+    public void theButtonsAreNotDisplayed(String first, String second) {
+        buttonsAreNotDisplayed(new String[]{first, second});
     }
 
-    @Entonces("no se muestran las opciones {string}, {string} y {string}")
-    public void noSeMuestranLasOpciones(String primera, String segunda, String tercera) {
-        noSeMuestranLosBotones(primera, segunda, tercera);
+    @Then("the {string}, {string} and {string} options are not displayed")
+    public void theOptionsAreNotDisplayed(String first, String second, String third) {
+        buttonsAreNotDisplayed(first, second, third);
     }
 
-    @Entonces("se muestra el control {string} y no se muestran los controles {string} ni {string}")
-    public void seMuestraUnControlYNoLosOtros(String visible, String oculto1, String oculto2) {
-        seMuestranLosBotones(visible);
-        noSeMuestranLosBotones(oculto1, oculto2);
+    @Then("the {string} control is displayed but not the {string} and {string} controls")
+    public void oneControlIsDisplayedButNotTheOthers(String visible, String hidden1, String hidden2) {
+        buttonsAreDisplayed(visible);
+        buttonsAreNotDisplayed(hidden1, hidden2);
     }
 
-    @Entonces("se muestra el mensaje {string}")
-    public void seMuestraElMensaje(String texto) {
-        verificarQue(ElementoVisible.de(mensaje(texto)), is(true));
+    @Then("the message {string} is displayed")
+    public void theMessageIsDisplayed(String text) {
+        verifyThat(Visibility.of(message(text)), is(true));
     }
 
-    @Entonces("no se muestra el mensaje {string}")
-    public void noSeMuestraElMensaje(String texto) {
-        verificarQue(ElementoVisible.de(mensaje(texto)), is(false));
+    @Then("the message {string} is not displayed")
+    public void theMessageIsNotDisplayed(String text) {
+        verifyThat(Visibility.of(message(text)), is(false));
     }
 
-    @Entonces("es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado")
-    public void esRedirigidoOAvisado() {
-        verificarQue(Question.about("si la vista protege la ruta").answeredBy(actor -> {
-            String ruta = Navegacion.rutaActual().answeredBy(actor);
-            String texto = Navegacion.textoVisible().answeredBy(actor).toLowerCase();
-            return ruta.equals("#/login") || texto.contains("not authorized") || texto.contains("no autorizado");
+    @Then("the user is redirected to the home screen or gets an unauthorized access message")
+    public void isRedirectedOrWarned() {
+        verifyThat(Question.about("whether the view protects the route").answeredBy(actor -> {
+            String route = Navigation.currentRoute().answeredBy(actor);
+            String text = Navigation.visibleText().answeredBy(actor).toLowerCase();
+            return route.equals("#/login") || text.contains("not authorized") || text.contains("unauthorized");
         }), is(true));
     }
 
-    @Entonces("no se muestran plantillas sin procesar como {string}")
-    public void noSeMuestranPlantillasSinProcesar(String plantilla) {
-        verificarQue(Navegacion.textoVisible(), not(containsString(plantilla)));
+    @Then("no unprocessed templates such as {string} are displayed")
+    public void noUnprocessedTemplatesAreDisplayed(String template) {
+        verifyThat(Navigation.visibleText(), not(containsString(template)));
     }
 
-    private static void seMuestranLosBotones(String... textos) {
-        for (String texto : textos) {
-            verificarQue(ElementoVisible.de(boton(texto)), is(true));
+    private static void buttonsAreDisplayed(String... texts) {
+        for (String text : texts) {
+            verifyThat(Visibility.of(button(text)), is(true));
         }
     }
 
-    private static void noSeMuestranLosBotones(String... textos) {
-        for (String texto : textos) {
-            verificarQue(ElementoVisible.de(boton(texto)), is(false));
+    private static void buttonsAreNotDisplayed(String... texts) {
+        for (String text : texts) {
+            verifyThat(Visibility.of(button(text)), is(false));
         }
     }
 }

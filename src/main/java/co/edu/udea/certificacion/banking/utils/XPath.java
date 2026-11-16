@@ -5,14 +5,14 @@ public final class XPath {
     private XPath() {
     }
 
-    /** Convierte un texto en un literal XPath válido aunque contenga comillas. */
-    public static String literal(String texto) {
-        if (!texto.contains("'")) {
-            return "'" + texto + "'";
+    /** Turns a text into a valid XPath literal, even when it contains quotes. */
+    public static String literal(String text) {
+        if (!text.contains("'")) {
+            return "'" + text + "'";
         }
-        if (!texto.contains("\"")) {
-            return "\"" + texto + "\"";
+        if (!text.contains("\"")) {
+            return "\"" + text + "\"";
         }
-        return "concat('" + texto.replace("'", "',\"'\",'") + "')";
+        return "concat('" + text.replace("'", "',\"'\",'") + "')";
     }
 }

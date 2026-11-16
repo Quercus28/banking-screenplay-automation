@@ -1,29 +1,28 @@
-# language: es
 @customer @HU-07
-Característica: HU-07 - Cerrar sesión
-  Como cliente,
-  quiero cerrar mi sesión,
-  para que nadie más pueda ver mi información ni hacer operaciones con mis cuentas desde el mismo equipo.
+Feature: HU-07 - Log out
+  As a customer,
+  I want to log out,
+  so that nobody else can see my information or make transactions with my accounts from the same computer.
 
-  @CA-HU07-01 @EXP-032 @exitoso
-  Escenario: Cerrar sesión del cliente
-    Dado que el cliente "Harry Potter" inició sesión
-    Cuando cierra sesión
-    Entonces la ruta de la aplicación es "#/customer"
-    Y el selector de clientes muestra la opción "---Your Name---"
-    Y no se muestran los botones "Logout" y "Login"
+  @CA-HU07-01 @EXP-032 @happy-path
+  Scenario: The customer logs out
+    Given the customer "Harry Potter" has logged in
+    When the customer logs out
+    Then the application route is "#/customer"
+    And the customer dropdown shows the option "---Your Name---"
+    And the "Logout" and "Login" buttons are not displayed
 
-  @CA-HU07-02 @EXP-033 @negativo @defecto @HAL-02
-  Escenario: Volver a la cuenta con el botón Atrás después de cerrar sesión
-    Dado que el cliente "Harry Potter" inició sesión
-    Y cerró sesión
-    Cuando regresa con el botón Atrás del navegador
-    Entonces no se muestra la información de la cuenta
-    Y no puede realizar operaciones sin iniciar sesión de nuevo
+  @CA-HU07-02 @EXP-033 @negative @defect @HAL-02
+  Scenario: Go back to the account with the Back button after logging out
+    Given the customer "Harry Potter" has logged in
+    And the customer has logged out
+    When the user goes back with the browser Back button
+    Then the account information is not displayed
+    And the user cannot make transactions without logging in again
 
-  @CA-HU07-03 @EXP-005 @negativo @defecto @HAL-01
-  Escenario: Acceso directo sin sesión a la ruta de la cuenta del cliente
-    Dado que el visitante tiene una sesión nueva del navegador
-    Cuando abre directamente la ruta "#/account"
-    Entonces es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado
-    Y no se muestran plantillas sin procesar como "{{user}}"
+  @CA-HU07-03 @EXP-005 @negative @defect @HAL-01
+  Scenario: Direct access to the customer account route without a session
+    Given the visitor has a new browser session
+    When the user opens the route "#/account" directly
+    Then the user is redirected to the home screen or gets an unauthorized access message
+    And no unprocessed templates such as "{{user}}" are displayed

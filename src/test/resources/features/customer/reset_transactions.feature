@@ -1,18 +1,17 @@
-# language: es
 @customer @HU-12
-Característica: HU-12 - Reiniciar el historial de una cuenta
-  Como cliente,
-  quiero reiniciar el historial de una de mis cuentas,
-  para dejarla sin movimientos y empezar un registro nuevo.
+Feature: HU-12 - Reset an account's history
+  As a customer,
+  I want to reset the history of one of my accounts,
+  so that it has no transactions and I can start a new record.
 
-  @CA-HU12-01 @EXP-055 @alternativo @HAL-10
-  Escenario: Reiniciar movimientos con Reset
-    Dado que el cliente "Ana QAPrueba" tiene una cuenta en "Dollar"
-    Y realizó las operaciones
-      | tipo     | monto |
-      | deposito | 700   |
-    Cuando consulta los movimientos de la cuenta
-    Y pulsa el botón "Reset"
-    Entonces el historial no muestra movimientos
-    Cuando pulsa el botón "Back"
-    Entonces el saldo de la cuenta es 0
+  @CA-HU12-01 @EXP-055 @alternative @HAL-10
+  Scenario: Reset transactions with Reset
+    Given the customer "Ana QAPrueba" has an account in "Dollar"
+    And the customer has made the transactions
+      | type    | amount |
+      | deposit | 700    |
+    When the customer views the account transactions
+    And the user clicks the "Reset" button
+    Then the history shows no transactions
+    When the user clicks the "Back" button
+    Then the account balance is 0

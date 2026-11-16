@@ -1,79 +1,78 @@
-# language: es
 @customer @HU-08
-Característica: HU-08 - Depositar dinero
-  Como cliente,
-  quiero depositar dinero en una de mis cuentas,
-  para aumentar el saldo que tengo disponible.
+Feature: HU-08 - Deposit money
+  As a customer,
+  I want to deposit money into one of my accounts,
+  so that I increase the balance I have available.
 
-  Antecedentes:
-    Dado que el cliente "Ana QAPrueba" tiene una cuenta en "Dollar"
+  Background:
+    Given the customer "Ana QAPrueba" has an account in "Dollar"
 
-  @CA-HU08-01 @CA-HU02-02 @EXP-035 @exitoso
-  Escenario: Depósito válido
-    Dado que la cuenta tiene saldo 0
-    Cuando deposita 1000
-    Entonces se muestra el mensaje "Deposit Successful"
-    Y el saldo de la cuenta es 1000
-    Y el campo de monto queda vacío
+  @CA-HU08-01 @CA-HU02-02 @EXP-035 @happy-path
+  Scenario: Valid deposit
+    Given the account has a balance of 0
+    When the customer deposits 1000
+    Then the message "Deposit Successful" is displayed
+    And the account balance is 1000
+    And the amount field is empty
 
-  @CA-HU08-02 @EXP-036 @alternativo
-  Escenario: Depósitos consecutivos
-    Dado que la cuenta tiene saldo 1000
-    Cuando deposita 500
-    Entonces se muestra el mensaje "Deposit Successful"
-    Y el saldo de la cuenta es 1500
-    Cuando deposita 250
-    Entonces se muestra el mensaje "Deposit Successful"
-    Y el saldo de la cuenta es 1750
+  @CA-HU08-02 @EXP-036 @alternative
+  Scenario: Consecutive deposits
+    Given the account has a balance of 1000
+    When the customer deposits 500
+    Then the message "Deposit Successful" is displayed
+    And the account balance is 1500
+    When the customer deposits 250
+    Then the message "Deposit Successful" is displayed
+    And the account balance is 1750
 
-  @CA-HU08-04 @EXP-037 @negativo @defecto @HAL-03 @HAL-04
-  Escenario: Depósito de cero justo después de un depósito exitoso
-    Dado que la cuenta tiene saldo 1500
-    Y acaba de depositar 250 con éxito
-    Cuando deposita 0
-    Entonces se muestra un mensaje de error de monto inválido
-    Y no se muestra el mensaje "Deposit Successful"
-    Y el saldo de la cuenta es 1750
+  @CA-HU08-04 @EXP-037 @negative @defect @HAL-03 @HAL-04
+  Scenario: Zero deposit right after a successful deposit
+    Given the account has a balance of 1500
+    And the customer has just deposited 250 successfully
+    When the customer deposits 0
+    Then an invalid amount error message is displayed
+    And the message "Deposit Successful" is not displayed
+    And the account balance is 1750
 
-  @CA-HU08-04 @EXP-037 @negativo @defecto @HAL-03
-  Escenario: Depósito de cero con el formulario recién abierto
-    Dado que la cuenta tiene saldo 1750
-    Cuando deposita 0
-    Entonces se muestra un mensaje de error de monto inválido
-    Y el saldo de la cuenta es 1750
+  @CA-HU08-04 @EXP-037 @negative @defect @HAL-03
+  Scenario: Zero deposit with a freshly opened form
+    Given the account has a balance of 1750
+    When the customer deposits 0
+    Then an invalid amount error message is displayed
+    And the account balance is 1750
 
-  @CA-HU08-05 @EXP-038 @negativo @defecto @HAL-03
-  Escenario: Depósito negativo
-    Dado que la cuenta tiene saldo 1750
-    Cuando deposita -100
-    Entonces se muestra un mensaje de error de monto inválido
-    Y el saldo de la cuenta es 1750
+  @CA-HU08-05 @EXP-038 @negative @defect @HAL-03
+  Scenario: Negative deposit
+    Given the account has a balance of 1750
+    When the customer deposits -100
+    Then an invalid amount error message is displayed
+    And the account balance is 1750
 
-  @CA-HU08-03 @EXP-039 @negativo
-  Escenario: Depósito con el campo vacío
-    Dado que la cuenta tiene saldo 1750
-    Cuando envía el depósito sin escribir un monto
-    Entonces el campo de monto muestra la validación de campo obligatorio
-    Y el saldo de la cuenta es 1750
+  @CA-HU08-03 @EXP-039 @negative
+  Scenario: Deposit with an empty field
+    Given the account has a balance of 1750
+    When the customer submits the deposit without an amount
+    Then the amount field shows the required field validation
+    And the account balance is 1750
 
-  @EXP-040 @alternativo @HAL-15
-  Escenario: Depósito con valor decimal
-    Dado que la cuenta tiene saldo 1750
-    Cuando deposita 10.5
-    Entonces el campo de monto muestra la validación de valor no válido
-    Y el saldo de la cuenta es 1750
+  @EXP-040 @alternative @HAL-15
+  Scenario: Deposit with a decimal value
+    Given the account has a balance of 1750
+    When the customer deposits 10.5
+    Then the amount field shows the invalid value validation
+    And the account balance is 1750
 
-  @EXP-041 @negativo @HAL-15
-  Escenario: Depósito con caracteres no numéricos
-    Dado que la cuenta tiene saldo 1750
-    Cuando intenta escribir "abc" como monto del depósito y lo envía
-    Entonces el campo de monto queda vacío
-    Y el campo de monto muestra la validación de campo obligatorio
-    Y el saldo de la cuenta es 1750
+  @EXP-041 @negative @HAL-15
+  Scenario: Deposit with non-numeric characters
+    Given the account has a balance of 1750
+    When the customer tries to type "abc" as the deposit amount and submits it
+    Then the amount field is empty
+    And the amount field shows the required field validation
+    And the account balance is 1750
 
-  @EXP-041 @alternativo @HAL-15
-  Escenario: Depósito con notación exponencial
-    Dado que la cuenta tiene saldo 1750
-    Cuando intenta escribir "1e2" como monto del depósito y lo envía
-    Entonces se muestra el mensaje "Deposit Successful"
-    Y el saldo de la cuenta es 1850
+  @EXP-041 @alternative @HAL-15
+  Scenario: Deposit with exponential notation
+    Given the account has a balance of 1750
+    When the customer tries to type "1e2" as the deposit amount and submits it
+    Then the message "Deposit Successful" is displayed
+    And the account balance is 1850

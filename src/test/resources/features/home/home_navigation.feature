@@ -1,57 +1,56 @@
-# language: es
-@inicio
-Característica: Inicio y navegación en XYZ Bank
-  Como usuario de XYZ Bank
-  Quiero acceder a la aplicación y navegar entre sus módulos
-  Para usar las funcionalidades de cliente o de administrador
+@home
+Feature: XYZ Bank home and navigation
+  As an XYZ Bank user
+  I want to access the application and navigate between its modules
+  So that I can use the customer or manager features
 
-  @EXP-001 @exitoso
-  Escenario: Carga de la pantalla principal del banco
-    Dado que el visitante abre la aplicación del banco
-    Entonces el título de la página es "XYZ Bank"
-    Y se muestran las opciones "Home", "Customer Login" y "Bank Manager Login"
-    Y no se muestra el botón "Logout"
+  @EXP-001 @happy-path
+  Scenario: The bank home screen loads
+    Given the visitor opens the bank application
+    Then the page title is "XYZ Bank"
+    And the "Home", "Customer Login" and "Bank Manager Login" options are displayed
+    And the "Logout" button is not displayed
 
-  @EXP-002 @exitoso @HAL-16
-  Escenario: Ingreso como administrador
-    Dado que el visitante abre la aplicación del banco
-    Cuando ingresa como administrador
-    Entonces la ruta de la aplicación es "#/manager"
-    Y se muestran las opciones "Add Customer", "Open Account" y "Customers"
+  @EXP-002 @happy-path @HAL-16
+  Scenario: Log in as bank manager
+    Given the visitor opens the bank application
+    When the user logs in as bank manager
+    Then the application route is "#/manager"
+    And the "Add Customer", "Open Account" and "Customers" options are displayed
 
-  @EXP-004 @alternativo
-  Escenario: Regreso a la pantalla principal con el botón Home
-    Dado que el administrador está en la pestaña "Open Account"
-    Cuando pulsa el botón "Home"
-    Entonces la ruta de la aplicación es "#/login"
-    Y se muestran las opciones "Customer Login" y "Bank Manager Login"
-    Cuando regresa con el botón Atrás del navegador
-    Entonces la ruta de la aplicación es "#/manager/openAccount"
+  @EXP-004 @alternative
+  Scenario: Go back to the home screen with the Home button
+    Given the manager is on the "Open Account" tab
+    When the user clicks the "Home" button
+    Then the application route is "#/login"
+    And the "Customer Login" and "Bank Manager Login" options are displayed
+    When the user goes back with the browser Back button
+    Then the application route is "#/manager/openAccount"
 
-  # Cada ruta va en un escenario separado: en un esquema, Serenity acumula en la última fila
-  # los fallos de las anteriores y el reporte no mostraría el resultado real de cada ruta.
-  # La ruta "#/account" se verifica en customer/logout.feature (CA-HU07-03).
-  @EXP-005 @negativo @defecto @HAL-01
-  Escenario: Acceso directo sin sesión a la ruta del administrador
-    Dado que el visitante tiene una sesión nueva del navegador
-    Cuando abre directamente la ruta "#/manager/addCust"
-    Entonces es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado
+  # Each route goes in its own scenario: in a scenario outline, Serenity accumulates the failures of
+  # the previous rows in the last one and the report would not show the real result of each route.
+  # The "#/account" route is checked in customer/logout.feature (CA-HU07-03).
+  @EXP-005 @negative @defect @HAL-01
+  Scenario: Direct access to the manager route without a session
+    Given the visitor has a new browser session
+    When the user opens the route "#/manager/addCust" directly
+    Then the user is redirected to the home screen or gets an unauthorized access message
 
-  @EXP-005 @negativo @defecto @HAL-01
-  Escenario: Acceso directo sin sesión a la ruta de movimientos
-    Dado que el visitante tiene una sesión nueva del navegador
-    Cuando abre directamente la ruta "#/listTx"
-    Entonces es redirigido a la pantalla principal o recibe un mensaje de acceso no autorizado
+  @EXP-005 @negative @defect @HAL-01
+  Scenario: Direct access to the transactions route without a session
+    Given the visitor has a new browser session
+    When the user opens the route "#/listTx" directly
+    Then the user is redirected to the home screen or gets an unauthorized access message
 
-  @EXP-006 @alternativo
-  Escenario: Persistencia de datos al recargar y aislamiento entre sesiones
-    Dado que el administrador registró los clientes
-      | nombre | apellido | codigo_postal |
-      | Ana    | QAPrueba | QA0001        |
-    Y está en la pestaña "Customers"
-    Cuando recarga la página
-    Y busca "QAPrueba" en el listado de clientes
-    Entonces el listado muestra 1 cliente
-    Cuando abre la aplicación en una sesión nueva del navegador como administrador
-    Y busca "QAPrueba" en el listado de clientes
-    Entonces el listado muestra 0 clientes
+  @EXP-006 @alternative
+  Scenario: Data persists after reloading and stays isolated between sessions
+    Given the manager has registered the customers
+      | first_name | last_name | post_code |
+      | Ana        | QAPrueba  | QA0001    |
+    And the manager goes to the "Customers" tab
+    When the user reloads the page
+    And the manager searches for "QAPrueba" in the customer list
+    Then the list shows 1 customer
+    When the manager opens the application in a new browser session
+    And the manager searches for "QAPrueba" in the customer list
+    Then the list shows 0 customers

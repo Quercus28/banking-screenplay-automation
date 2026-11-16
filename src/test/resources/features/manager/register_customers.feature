@@ -1,80 +1,79 @@
-# language: es
 @manager @HU-01
-Característica: HU-01 - Registrar clientes
-  Como administrador bancario,
-  quiero registrar a un nuevo cliente con su nombre, apellido y código postal,
-  para que quede inscrito en el banco y se le pueda abrir una cuenta.
+Feature: HU-01 - Register customers
+  As a bank manager,
+  I want to register a new customer with their first name, last name and post code,
+  so that they are enrolled in the bank and an account can be opened for them.
 
-  Antecedentes:
-    Dado que el administrador está en la pestaña "Add Customer"
+  Background:
+    Given the manager is on the "Add Customer" tab
 
-  @CA-HU01-01 @EXP-007 @exitoso
-  Escenario: Registrar un cliente con datos válidos
-    Cuando registra un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Entonces se muestra la alerta "Customer added successfully with customer id :" seguida del identificador asignado
-    Y el formulario de registro queda vacío
-    Y el cliente "Ana" "QAPrueba" con código postal "QA0001" aparece en el listado sin número de cuenta
+  @CA-HU01-01 @EXP-007 @happy-path
+  Scenario: Register a customer with valid data
+    When the manager registers a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    Then the alert "Customer added successfully with customer id :" is displayed followed by the assigned id
+    And the registration form is cleared
+    And the customer "Ana" "QAPrueba" with post code "QA0001" appears in the list without an account number
 
-  @CA-HU01-01 @EXP-008 @alternativo
-  Escenario: Registrar un segundo cliente con nombre y apellido distintos
-    Dado que registró un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Cuando registra un cliente con nombre "Luis", apellido "QAExplora" y código postal "QA0002"
-    Entonces el identificador asignado es el siguiente al del cliente anterior
-    Y el formulario de registro queda vacío
+  @CA-HU01-01 @EXP-008 @alternative
+  Scenario: Register a second customer with a different first and last name
+    Given the manager has registered a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    When the manager registers a customer with first name "Luis", last name "QAExplora" and post code "QA0002"
+    Then the assigned id follows the previous customer's id
+    And the registration form is cleared
 
-  @CA-HU01-02 @EXP-009 @negativo
-  Escenario: Enviar el formulario Add Customer completamente vacío
-    Cuando envía el formulario de registro sin diligenciar ningún campo
-    Entonces el campo "First Name" muestra la validación de campo obligatorio
-    Y no se muestra ninguna alerta
-    Y no se registra ningún cliente nuevo
+  @CA-HU01-02 @EXP-009 @negative
+  Scenario: Submit the Add Customer form completely empty
+    When the manager submits the registration form without filling in any field
+    Then the field "First Name" shows the required field validation
+    And no alert is displayed
+    And no new customer is registered
 
-  @CA-HU01-03 @EXP-010 @negativo
-  Esquema del escenario: Omitir un campo obligatorio
-    Cuando registra un cliente con nombre "<nombre>", apellido "<apellido>" y código postal "<codigo_postal>"
-    Entonces el campo "<campo_faltante>" muestra la validación de campo obligatorio
-    Y no se registra ningún cliente nuevo
+  @CA-HU01-03 @EXP-010 @negative
+  Scenario Outline: Leave a required field empty
+    When the manager registers a customer with first name "<first_name>", last name "<last_name>" and post code "<post_code>"
+    Then the field "<missing_field>" shows the required field validation
+    And no new customer is registered
 
-    Ejemplos:
-      | nombre | apellido  | codigo_postal | campo_faltante |
-      | Carla  | QAOmision |               | Post Code      |
-      | Carla  |           | QA0003        | Last Name      |
+    Examples:
+      | first_name | last_name | post_code | missing_field |
+      | Carla      | QAOmision |           | Post Code     |
+      | Carla      |           | QA0003    | Last Name     |
 
-  @CA-HU01-04 @EXP-011 @alternativo @HAL-08
-  Escenario: Registrar un cliente con caracteres especiales
-    Cuando registra un cliente con nombre "José-María", apellido "O'Brien Ñúñez" y código postal "@#$%&*"
-    Entonces se muestra la alerta "Customer added successfully with customer id :" seguida del identificador asignado
-    Y el cliente "José-María" "O'Brien Ñúñez" con código postal "@#$%&*" aparece en el listado sin número de cuenta
+  @CA-HU01-04 @EXP-011 @alternative @HAL-08
+  Scenario: Register a customer with special characters
+    When the manager registers a customer with first name "José-María", last name "O'Brien Ñúñez" and post code "@#$%&*"
+    Then the alert "Customer added successfully with customer id :" is displayed followed by the assigned id
+    And the customer "José-María" "O'Brien Ñúñez" with post code "@#$%&*" appears in the list without an account number
 
-  @EXP-012 @negativo @defecto @HAL-08
-  Escenario: Registrar un cliente con nombre y apellido numéricos
-    Cuando registra un cliente con nombre "12345", apellido "67890" y código postal "00000"
-    Entonces el sistema rechaza el registro por formato de nombre inválido
-    Y no se registra ningún cliente nuevo
+  @EXP-012 @negative @defect @HAL-08
+  Scenario: Register a customer with a numeric first and last name
+    When the manager registers a customer with first name "12345", last name "67890" and post code "00000"
+    Then the system rejects the registration because of an invalid name format
+    And no new customer is registered
 
-  @CA-HU01-07 @EXP-013 @negativo @defecto @HAL-06
-  Escenario: Enviar campos que solo contienen espacios en blanco
-    Cuando registra un cliente con nombre "   ", apellido "   " y código postal "   "
-    Entonces el sistema informa que los campos son obligatorios o inválidos
-    Y no se muestra la alerta "Please check the details. Customer may be duplicate."
-    Y no se registra ningún cliente nuevo
+  @CA-HU01-07 @EXP-013 @negative @defect @HAL-06
+  Scenario: Submit fields that contain only blank spaces
+    When the manager registers a customer with first name "   ", last name "   " and post code "   "
+    Then the system reports that the fields are required or invalid
+    And the alert "Please check the details. Customer may be duplicate." is not displayed
+    And no new customer is registered
 
-  @CA-HU01-05 @EXP-014 @negativo
-  Escenario: Registrar un cliente duplicado con los mismos datos
-    Dado que registró un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Cuando registra un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Entonces se muestra la alerta "Please check the details. Customer may be duplicate."
-    Y la búsqueda "QAPrueba" en el listado de clientes devuelve 1 cliente
+  @CA-HU01-05 @EXP-014 @negative
+  Scenario: Register a duplicate customer with the same data
+    Given the manager has registered a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    When the manager registers a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    Then the alert "Please check the details. Customer may be duplicate." is displayed
+    And searching for "QAPrueba" in the customer list returns 1 customer
 
-  @CA-HU01-06 @EXP-015 @alternativo
-  Escenario: Homónimo con otro código postal
-    Dado que registró un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Cuando registra un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA9999"
-    Entonces se muestra la alerta "Customer added successfully with customer id :" seguida del identificador asignado
+  @CA-HU01-06 @EXP-015 @alternative
+  Scenario: Namesake with a different post code
+    Given the manager has registered a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    When the manager registers a customer with first name "Ana", last name "QAPrueba" and post code "QA9999"
+    Then the alert "Customer added successfully with customer id :" is displayed followed by the assigned id
 
-  @EXP-015 @alternativo @defecto @HAL-07
-  Escenario: Duplicado con distinta capitalización
-    Dado que registró un cliente con nombre "Ana", apellido "QAPrueba" y código postal "QA0001"
-    Cuando registra un cliente con nombre "ana", apellido "qaprueba" y código postal "QA0001"
-    Entonces se muestra la alerta "Please check the details. Customer may be duplicate."
-    Y la búsqueda "prueba" en el listado de clientes devuelve 1 cliente
+  @EXP-015 @alternative @defect @HAL-07
+  Scenario: Duplicate with different capitalization
+    Given the manager has registered a customer with first name "Ana", last name "QAPrueba" and post code "QA0001"
+    When the manager registers a customer with first name "ana", last name "qaprueba" and post code "QA0001"
+    Then the alert "Please check the details. Customer may be duplicate." is displayed
+    And searching for "prueba" in the customer list returns 1 customer
