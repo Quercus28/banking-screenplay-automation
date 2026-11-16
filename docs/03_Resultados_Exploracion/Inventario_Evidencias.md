@@ -1,6 +1,6 @@
 # Inventario de evidencias
 
-118 capturas originales y 118 anotadas. Rutas relativas a esta carpeta.
+116 capturas originales y 116 anotadas. Rutas relativas a esta carpeta.
 
 | Figura (Word) | Caso | Descripción | Original | Anotada |
 |---|---|---|---|---|
@@ -120,7 +120,5 @@
 | 115 | EXP-055 | Movimientos antes de pulsar Reset. | [original](../01_Capturas_Originales/EXP-055_reset_antes.png) | [anotada](../02_Capturas_Anotadas/EXP-055_reset_antes.png) |
 | 116 | EXP-055 | Movimientos después de pulsar Reset. | [original](../01_Capturas_Originales/EXP-055_reset_despues.png) | [anotada](../02_Capturas_Anotadas/EXP-055_reset_despues.png) |
 | 117 | EXP-055 | Saldo 0 después del Reset. | [original](../01_Capturas_Originales/EXP-055_reset_saldo.png) | [anotada](../02_Capturas_Anotadas/EXP-055_reset_saldo.png) |
-| 118 | EXP-056 | Opciones del cliente: Transactions, Deposit y Withdrawl, sin transferencias. | [original](../01_Capturas_Originales/EXP-056_sin_transferencias_cliente.png) | [anotada](../02_Capturas_Anotadas/EXP-056_sin_transferencias_cliente.png) |
-| 119 | EXP-056 | Opciones del administrador, sin transferencias. | [original](../01_Capturas_Originales/EXP-056_sin_transferencias_admin.png) | [anotada](../02_Capturas_Anotadas/EXP-056_sin_transferencias_admin.png) |
 
 Figura 1 del documento Word: [Mapa_Navegacion.png](Mapa_Navegacion.png) (diagrama elaborado a partir de la exploración).

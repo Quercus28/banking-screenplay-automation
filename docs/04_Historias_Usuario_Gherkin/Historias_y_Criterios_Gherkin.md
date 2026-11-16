@@ -802,7 +802,6 @@ Consideraciones:
 | HAL-10 | Reset deja el saldo en 0 y no pide confirmación | HU-12 (RN-HU12-03, RN-HU12-04) |
 | HAL-11 | Eliminación de clientes sin confirmación | HU-04 (RN-HU04-03) |
 | HAL-12 | Los encabezados ordenables cambian la dirección a '#' | HU-03 (CA-HU03-06), HU-10 (CA-HU10-04) |
-| HAL-13 | No existen transferencias | Alcance y limitaciones (HU-F01 propuesta) |
 | HAL-14 | Texto 'Withdrawl' y errores en datos precargados | Consideraciones para Serenity |
 | HAL-15 | Montos solo enteros y aceptación de '1e2' | HU-08 (RN-HU08-07), HU-09 (RN-HU09-07) |
 | HAL-16 | Administrador sin credenciales ni Logout | Alcance y consideraciones para Serenity |
@@ -864,11 +863,6 @@ Consideraciones:
 
 ## Limitaciones identificadas
 
-**Transferencias**
-
-- El enunciado del taller pide automatizar transferencias, pero la aplicación no tiene esa opción para ningún rol (EXP-056, HAL-13). No se escribieron criterios para una pantalla inexistente.
-- Historia propuesta fuera del alcance: HU-F01 — Transferir dinero entre cuentas. Como cliente, quiero transferir dinero de una de mis cuentas a otra, para mover mi saldo sin tener que hacer un retiro y un depósito por separado. Propuesta para conversar con el docente. La aplicación no ofrece transferencias (EXP-056, HAL-13); por eso esta historia no tiene criterios de aceptación ni hace parte de lo que se automatizará.
-
 **Comportamientos pendientes de verificación**
 
 - Después de cerrar sesión y regresar con el botón Atrás, el punto 2 confirma que la cuenta vuelve a mostrarse (HAL-02), pero no deja registrado si se pueden hacer operaciones desde esa vista. CA-HU07-02 exige que la cuenta no se muestre, así que cubre ambos casos.
@@ -901,7 +895,6 @@ Consideraciones:
 
 ## Fuera del alcance
 
-- Transferencias entre cuentas. El enunciado del taller las menciona, pero la aplicación no las ofrece (EXP-056, HAL-13). Se deja una historia propuesta, HU-F01, separada del alcance y sin criterios de aceptación.
 - Ingreso del administrador. Es un botón sin credenciales (EXP-002, HAL-16), por lo que no tiene reglas propias que verificar; se usa como paso previo de las historias HU-01 a HU-04.
 - Navegación general (botón Home e historial del navegador) y persistencia de datos en el navegador (EXP-004, EXP-006). No son necesidades del usuario, pero se tienen en cuenta en las consideraciones para la automatización.
 - Pruebas de rendimiento, accesibilidad, compatibilidad entre navegadores y seguridad especializada.
@@ -909,7 +902,7 @@ Consideraciones:
 ## Fuentes
 
 - docs/Exploracion_Manual_GlobalSQA_Banking.docx — Informe de exploración manual del punto 2.
-- docs/03_Resultados_Exploracion/Matriz_Exploracion.md — Escenarios EXP-001 a EXP-056 (referencia principal).
+- docs/03_Resultados_Exploracion/Matriz_Exploracion.md — Escenarios EXP-001 a EXP-055 (referencia principal).
 - docs/03_Resultados_Exploracion/Hallazgos.md — Hallazgos HAL-01 a HAL-17.
 - docs/03_Resultados_Exploracion/Inventario_Evidencias.md — Relación de capturas por escenario.
 - docs/03_Resultados_Exploracion/Mapa_Navegacion.png — Diagrama de navegación.
