@@ -60,7 +60,56 @@ dependencies {
 
 tasks.named('test') {
     // System configs
+    mustRunAfter 'clean'
 
+    // Optional filter: -Dtags="@HAL-03"
+    def tags = System.getProperty('tags')
+    if (tags) {
+        systemProperty 'cucumber.filter.tags', tags
+    }
 }
 
 apply plugin: 'net.serenity-bdd.serenity-gradle-plugin'
+
+def failedScenarios = 0
+tasks.named('test') {
+    afterSuite { suite, result ->
+        if (suite.parent == null) {
+            failedScenarios = result.failedTestCount
+        }
+    }
+}
+
+// Two commands to run the suite:
+//   ./gradlew serenity       -> without the demo panel
+//   ./gradlew serenityDemo   -> with the demo panel (pauses on every step)
+[
+        serenity    : 'Runs the Serenity tests WITHOUT the demo panel and builds the report',
+        serenityDemo: 'Runs the Serenity tests WITH the demo panel and builds the report'
+].each { taskName, taskDescription ->
+    tasks.register(taskName) {
+        group = 'serenity'
+        description = taskDescription
+        dependsOn 'clean', 'test', 'aggregate'
+        doLast {
+            if (failedScenarios > 0) {
+                throw new GradleException("${failedScenarios} scenario(s) failed. " +
+                        "Report: target/site/serenity/index.html")
+            }
+        }
+    }
+}
+
+tasks.named('aggregate') {
+    mustRunAfter 'test'
+}
+
+gradle.taskGraph.whenReady { graph ->
+    // Only these two commands override serenity.conf; plain "gradlew test" keeps using it.
+    def demo = graph.hasTask(':serenityDemo')
+    if (demo || graph.hasTask(':serenity')) {
+        tasks.test.systemProperty 'demo.overlay.enabled', demo.toString()
+        // Always build the report; the serenity/serenityDemo task fails the build afterwards if a scenario failed.
+        tasks.test.ignoreFailures = true
+    }
+}
