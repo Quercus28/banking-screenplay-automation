@@ -23,7 +23,8 @@ java {
 
 repositories {
     mavenCentral()
-    // serenity-captions (https://github.com/Quercus28/serenity-captions)
+    // JitPack is only needed for the serenity-captions library (captions panel used by "gradlew serenityCaptions").
+    // Source and docs: https://github.com/Quercus28/serenity-captions
     maven { url 'https://jitpack.io' }
 }
 
